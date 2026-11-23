@@ -3,6 +3,7 @@
 import { type ReactNode, useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { hashToRoute, routeToHash, type Route } from "@/lib/route";
 import Footer from "./Footer";
+import GameDetail from "./GameDetail";
 import Library from "./Library";
 import Nav from "./Nav";
 
@@ -102,11 +103,14 @@ export default function ArcadeApp() {
     } catch {}
   }, []);
 
-  // Pantallas pendientes (pasos 4–7) muestran la Biblioteca.
+  // Pantallas pendientes (pasos 5–7) muestran la Biblioteca.
   void saveScore;
   void login;
   let screen: ReactNode;
   switch (route.name) {
+    case "detalle":
+      screen = <GameDetail key={route.id} id={route.id} navigate={navigate} />;
+      break;
     default:
       screen = <Library navigate={navigate} />;
   }
