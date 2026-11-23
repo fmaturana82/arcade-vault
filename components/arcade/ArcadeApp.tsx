@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import GameDetail from "./GameDetail";
 import GamePlayer from "./GamePlayer";
 import HallOfFame from "./HallOfFame";
+import Home from "./Home";
 import Library from "./Library";
 import Nav from "./Nav";
 
@@ -121,8 +122,11 @@ export default function ArcadeApp() {
     case "salon":
       screen = <HallOfFame user={user} />;
       break;
-    default:
+    case "biblioteca":
       screen = <Library navigate={navigate} />;
+      break;
+    default:
+      screen = <Home navigate={navigate} />;
   }
 
   return (

@@ -10,7 +10,7 @@ interface NavProps {
   onSignOut: () => void;
 }
 
-type NavTarget = "biblioteca" | "salon" | "auth";
+type NavTarget = "home" | "biblioteca" | "salon" | "auth";
 
 export default function Nav({ route, user, onSignOut }: NavProps) {
   const [open, setOpen] = useState(false);
@@ -23,6 +23,7 @@ export default function Nav({ route, user, onSignOut }: NavProps) {
   const cls = (name: NavTarget) => (isActive(name) ? "active" : undefined);
   const current = (name: NavTarget) => (isActive(name) ? ("page" as const) : undefined);
 
+  const homeHref = routeToHash({ name: "home" });
   const libHref = routeToHash({ name: "biblioteca" });
   const salonHref = routeToHash({ name: "salon" });
   const authHref = routeToHash({ name: "auth" });
@@ -30,13 +31,16 @@ export default function Nav({ route, user, onSignOut }: NavProps) {
   return (
     <>
       <nav className="av-nav" aria-label="Principal">
-        <a className="logo" href={libHref} onClick={close} aria-label="Arcade Vault — Biblioteca">
+        <a className="logo" href={homeHref} onClick={close} aria-label="Arcade Vault — Inicio">
           <div className="logo-mark" aria-hidden="true"></div>
           <div className="logo-text neon-cyan">
             ARCADE <span className="neon-magenta">VAULT</span>
           </div>
         </a>
         <div className="links">
+          <a className={cls("home")} aria-current={current("home")} href={homeHref}>
+            Inicio
+          </a>
           <a className={cls("biblioteca")} aria-current={current("biblioteca")} href={libHref}>
             Biblioteca
           </a>
@@ -89,6 +93,9 @@ export default function Nav({ route, user, onSignOut }: NavProps) {
         <div className="pixel neon-cyan" style={{ fontSize: 11, marginBottom: 16 }}>
           MENÚ
         </div>
+        <a className={cls("home")} aria-current={current("home")} href={homeHref} onClick={close}>
+          Inicio
+        </a>
         <a className={cls("biblioteca")} aria-current={current("biblioteca")} href={libHref} onClick={close}>
           Biblioteca
         </a>
