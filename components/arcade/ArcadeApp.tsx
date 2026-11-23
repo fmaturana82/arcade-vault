@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
+import { type ReactNode, useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { hashToRoute, routeToHash, type Route } from "@/lib/route";
 import Footer from "./Footer";
+import Library from "./Library";
 import Nav from "./Nav";
 
 export interface User {
@@ -101,18 +102,14 @@ export default function ArcadeApp() {
     } catch {}
   }, []);
 
-  // Las pantallas se añaden en los pasos 3–7; mientras tanto se muestra el hero de la Biblioteca.
-  void navigate;
+  // Pantallas pendientes (pasos 4–7) muestran la Biblioteca.
   void saveScore;
   void login;
-  const screen = (
-    <section className="av-hero">
-      <h1 className="flicker">ARCADE VAULT</h1>
-      <div className="sub">
-        INSERTA UNA MONEDA PARA JUGAR <span className="blink">_</span>
-      </div>
-    </section>
-  );
+  let screen: ReactNode;
+  switch (route.name) {
+    default:
+      screen = <Library navigate={navigate} />;
+  }
 
   return (
     <>
