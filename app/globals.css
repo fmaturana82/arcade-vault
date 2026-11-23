@@ -46,7 +46,10 @@
   --bronze: #d97a3a;
   --line: rgba(0, 245, 255, 0.18);
   --line-2: rgba(255, 255, 255, 0.06);
-  --pixel: var(--font-press-start), "Press Start 2P", system-ui, monospace;
+  /* Igual que la plantilla: next/font registra la familia "Press Start 2P" y la auto-hospeda, pero no se usa
+     var(--font-press-start) porque mete "Press Start 2P Fallback" (Arial escalado) antes de system-ui y
+     los glifos que la fuente no tiene (♥ ★ ▶) salen más anchos. */
+  --pixel: "Press Start 2P", system-ui, monospace;
   --mono: var(--font-jetbrains-mono), var(--font-courier-prime), "JetBrains Mono", "Courier Prime", "Courier New", monospace;
 }
 
@@ -202,7 +205,8 @@ a { color: inherit; text-decoration: none; }
 .av-nav .hamburger { display: none; }
 
 @media (max-width: 840px) {
-  .av-nav { padding: 12px 16px; }
+  .av-nav { padding: 12px 16px; gap: 12px; }
+  .av-nav .auth-btn { margin-left: 0; }
   .av-nav .links { display: none; }
   .av-nav .coin-counter { display: none; }
   .av-nav .hamburger { display: inline-flex; }
@@ -548,7 +552,8 @@ a { color: inherit; text-decoration: none; }
   margin: 48px auto;
   padding: 0 32px;
 }
-@media (max-width: 900px) { .av-detail { grid-template-columns: 1fr; } }
+/* minmax(0, 1fr): un `1fr` simple no baja del min-content y desborda a 375px */
+@media (max-width: 900px) { .av-detail { grid-template-columns: minmax(0, 1fr); } }
 .detail-cover {
   aspect-ratio: 16 / 10;
   position: relative;
@@ -949,12 +954,18 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 720px) {
-  .hall-table .th, .hall-table .tr { grid-template-columns: 50px 1fr 90px 90px; font-size: 12px; padding: 10px 12px; }
+  .hall-table .th, .hall-table .tr { grid-template-columns: 50px minmax(0, 1fr) 90px 90px; font-size: 12px; padding: 10px 12px; }
+  .hall-table .th { font-size: 7px; letter-spacing: 0.08em; }
+  .hall-table .tr .pl { overflow-wrap: anywhere; }
   .av-grid { padding: 0 16px; }
   .av-hero { padding: 36px 16px 16px; }
   .av-filters { padding: 0 16px; }
   .av-hall { padding: 0 16px; }
   .av-detail { padding: 0 16px; margin: 24px auto; }
+  .stat-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat-strip > div { padding: 12px 10px; }
+  .stat-strip .l { letter-spacing: 0.04em; }
+  .stat-strip .v { font-size: 12px; }
   .av-player { padding: 0 16px 32px; }
 }
 
@@ -979,3 +990,25 @@ a { color: inherit; text-decoration: none; }
   clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
 }
 @keyframes spinpix { to { transform: rotate(360deg); } }
+
+/* ===== accesibilidad (SPEC 01) — sin cambiar el aspecto con ratón ===== */
+a:focus-visible,
+button:focus-visible,
+.card:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+.btn:focus-visible {
+  /* clip-path recorta el outline: se usa el mismo resplandor que :hover */
+  color: var(--cyan);
+  box-shadow: 0 0 14px rgba(0,245,255,0.55), inset 0 0 8px rgba(0,245,255,0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
