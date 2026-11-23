@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Plantillas de diseño (React UMD + Babel en el navegador, con globals): no son código de la app.
+    "references/**",
   ]),
 ]);
 

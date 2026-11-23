@@ -46,7 +46,10 @@
   --bronze: #d97a3a;
   --line: rgba(0, 245, 255, 0.18);
   --line-2: rgba(255, 255, 255, 0.06);
-  --pixel: var(--font-press-start), "Press Start 2P", system-ui, monospace;
+  /* Igual que la plantilla: next/font registra la familia "Press Start 2P" y la auto-hospeda, pero no se usa
+     var(--font-press-start) porque mete "Press Start 2P Fallback" (Arial escalado) antes de system-ui y
+     los glifos que la fuente no tiene (♥ ★ ▶) salen más anchos. */
+  --pixel: "Press Start 2P", system-ui, monospace;
   --mono: var(--font-jetbrains-mono), var(--font-courier-prime), "JetBrains Mono", "Courier Prime", "Courier New", monospace;
 }
 
@@ -549,7 +552,8 @@ a { color: inherit; text-decoration: none; }
   margin: 48px auto;
   padding: 0 32px;
 }
-@media (max-width: 900px) { .av-detail { grid-template-columns: 1fr; } }
+/* minmax(0, 1fr): un `1fr` simple no baja del min-content y desborda a 375px */
+@media (max-width: 900px) { .av-detail { grid-template-columns: minmax(0, 1fr); } }
 .detail-cover {
   aspect-ratio: 16 / 10;
   position: relative;
@@ -958,6 +962,10 @@ a { color: inherit; text-decoration: none; }
   .av-filters { padding: 0 16px; }
   .av-hall { padding: 0 16px; }
   .av-detail { padding: 0 16px; margin: 24px auto; }
+  .stat-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stat-strip > div { padding: 12px 10px; }
+  .stat-strip .l { letter-spacing: 0.04em; }
+  .stat-strip .v { font-size: 12px; }
   .av-player { padding: 0 16px 32px; }
 }
 
