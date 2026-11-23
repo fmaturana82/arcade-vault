@@ -1,6 +1,6 @@
 # SPEC 01 — MVP visual: pantallas de Arcade Vault
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** — (ninguna)
 **Fecha:** 2026-11-23
 **Objetivo:** Replicar 1:1 en Next.js, como SPA cliente con datos mock, las cinco pantallas de `references/templates/` (Biblioteca, Detalle, Reproductor, Acceso y Salón de la Fama) sin implementar ningún juego.
@@ -108,20 +108,20 @@ Archivos modificados: `app/page.tsx`, `app/layout.tsx` (solo si hace falta para 
 
 ## Criterios de aceptación
 
-- [ ] `npm run lint` y `npm run build` terminan sin errores ni warnings de hidratación en consola del navegador.
-- [ ] Al abrir `/` se ve la Biblioteca con los 8 juegos y el hash es `#/`.
-- [ ] Escribir "ca" en el buscador deja solo CAÍDA; chip SHOOTER deja solo INVASORES y ROCAS; una búsqueda sin coincidencias muestra "NO HAY RESULTADOS".
-- [ ] Clic en una carta abre el Detalle con hash `#/juegos/{id}` y leaderboard de 10 filas.
-- [ ] Recargar en `#/juegos/caida` vuelve a mostrar el Detalle de CAÍDA; `#/juegos/no-existe` y `#/loquesea` muestran la Biblioteca.
-- [ ] "▶ JUGAR AHORA" abre el Reproductor (`#/juegos/{id}/jugar`); la puntuación sube sola; PAUSA la congela y muestra "EN PAUSA"; REANUDAR la reanuda.
-- [ ] FIN abre el modal con la puntuación final; "GUARDAR PUNTUACIÓN" añade una entrada a `av_scores` y muestra el toast; "JUGAR DE NUEVO" reinicia a 0 / 3 vidas / nivel 01; SALIR vuelve al Detalle.
-- [ ] En Acceso, el tab CREAR CUENTA muestra el campo de correo; enviar con usuario "neo" guarda `av_user = {"name":"NEO"}`, vuelve a Biblioteca y el Nav muestra "NEO ▾"; pulsarlo borra `av_user` y vuelve a "Iniciar Sesión".
-- [ ] Tras recargar con sesión iniciada, el Nav sigue mostrando el usuario.
-- [ ] Salón de la Fama muestra podio y 12 filas; cambiar de chip cambia los datos; con sesión aparece la fila "▸ TU MEJOR MARCA EN …".
-- [ ] El enlace activo del Nav se resalta (Biblioteca también en Detalle y Reproductor).
-- [ ] A 375 px de ancho: hamburguesa visible, el panel móvil abre/cierra (backdrop incluido) y no hay scroll horizontal.
-- [ ] No existe ningún juego jugable ni código de juego en el repo.
-- [ ] Comparación visual lado a lado con `references/templates/Arcade Vault.html`: mismas pantallas, textos y estilos.
+- [x] `npm run lint` y `npm run build` terminan sin errores ni warnings de hidratación en consola del navegador.
+- [x] Al abrir `/` se ve la Biblioteca con los 8 juegos y el hash es `#/`.
+- [x] Escribir "ca" en el buscador deja solo CAÍDA; chip SHOOTER deja solo INVASORES y ROCAS; una búsqueda sin coincidencias muestra "NO HAY RESULTADOS".
+- [x] Clic en una carta abre el Detalle con hash `#/juegos/{id}` y leaderboard de 10 filas.
+- [x] Recargar en `#/juegos/caida` vuelve a mostrar el Detalle de CAÍDA; `#/juegos/no-existe` y `#/loquesea` muestran la Biblioteca.
+- [x] "▶ JUGAR AHORA" abre el Reproductor (`#/juegos/{id}/jugar`); la puntuación sube sola; PAUSA la congela y muestra "EN PAUSA"; REANUDAR la reanuda.
+- [x] FIN abre el modal con la puntuación final; "GUARDAR PUNTUACIÓN" añade una entrada a `av_scores` y muestra el toast; "JUGAR DE NUEVO" reinicia a 0 / 3 vidas / nivel 01; SALIR vuelve al Detalle.
+- [x] En Acceso, el tab CREAR CUENTA muestra el campo de correo; enviar con usuario "neo" guarda `av_user = {"name":"NEO"}`, vuelve a Biblioteca y el Nav muestra "NEO ▾"; pulsarlo borra `av_user` y vuelve a "Iniciar Sesión".
+- [x] Tras recargar con sesión iniciada, el Nav sigue mostrando el usuario.
+- [x] Salón de la Fama muestra podio y 12 filas; cambiar de chip cambia los datos; con sesión aparece la fila "▸ TU MEJOR MARCA EN …".
+- [x] El enlace activo del Nav se resalta (Biblioteca también en Detalle y Reproductor).
+- [x] A 375 px de ancho: hamburguesa visible, el panel móvil abre/cierra (backdrop incluido) y no hay scroll horizontal.
+- [x] No existe ningún juego jugable ni código de juego en el repo.
+- [x] Comparación visual lado a lado con `references/templates/Arcade Vault.html`: mismas pantallas, textos y estilos.
 
 ---
 
