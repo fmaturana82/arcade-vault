@@ -1,6 +1,7 @@
 import { getGame } from "./data";
 
 export type Route =
+  | { name: "home" }
   | { name: "biblioteca" }
   | { name: "detalle"; id: string }
   | { name: "player"; id: string }
@@ -9,8 +10,10 @@ export type Route =
 
 export function routeToHash(r: Route): string {
   switch (r.name) {
-    case "biblioteca":
+    case "home":
       return "#/";
+    case "biblioteca":
+      return "#/biblioteca";
     case "detalle":
       return `#/juegos/${r.id}`;
     case "player":
@@ -22,9 +25,10 @@ export function routeToHash(r: Route): string {
   }
 }
 
-/** Hash desconocido o id de juego inexistente → Biblioteca. */
+/** Hash vacío, desconocido o id de juego inexistente → Home. */
 export function hashToRoute(hash: string): Route {
   const path = hash.replace(/^#/, "").replace(/\/+$/, "") || "/";
+  if (path === "/biblioteca") return { name: "biblioteca" };
   if (path === "/acceso") return { name: "auth" };
   if (path === "/salon") return { name: "salon" };
 
@@ -33,5 +37,5 @@ export function hashToRoute(hash: string): Route {
     const id = decodeURIComponent(m[1]);
     if (getGame(id)) return m[2] ? { name: "player", id } : { name: "detalle", id };
   }
-  return { name: "biblioteca" };
+  return { name: "home" };
 }
