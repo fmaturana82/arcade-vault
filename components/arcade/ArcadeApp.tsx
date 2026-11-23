@@ -70,8 +70,9 @@ export default function ArcadeApp() {
   const user = useMemo(() => parseUser(userRaw), [userRaw]);
 
   // Normaliza el hash (vacío, desconocido o id inexistente) a su forma canónica.
+  // Se calcula desde el hash real: en el pase de hidratación `route` aún refleja el snapshot del servidor.
   useEffect(() => {
-    const canonical = routeToHash(route);
+    const canonical = routeToHash(hashToRoute(window.location.hash));
     if (window.location.hash !== canonical) {
       history.replaceState(null, "", canonical);
       window.dispatchEvent(new HashChangeEvent("hashchange"));
