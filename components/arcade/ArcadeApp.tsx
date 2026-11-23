@@ -6,6 +6,7 @@ import Auth from "./Auth";
 import Footer from "./Footer";
 import GameDetail from "./GameDetail";
 import GamePlayer from "./GamePlayer";
+import HallOfFame from "./HallOfFame";
 import Library from "./Library";
 import Nav from "./Nav";
 
@@ -105,7 +106,6 @@ export default function ArcadeApp() {
     } catch {}
   }, []);
 
-  // Pantallas pendientes (paso 7) muestran la Biblioteca.
   let screen: ReactNode;
   switch (route.name) {
     case "detalle":
@@ -116,6 +116,9 @@ export default function ArcadeApp() {
       break;
     case "auth":
       screen = <Auth navigate={navigate} onLogin={login} />;
+      break;
+    case "salon":
+      screen = <HallOfFame user={user} />;
       break;
     default:
       screen = <Library navigate={navigate} />;
