@@ -37,9 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <div className="av-bg" aria-hidden="true" />
         <div className="av-noise" aria-hidden="true" />
-        <div id="root">
-          <main className="av-main">{children}</main>
-        </div>
+        <div id="root">{children}</div>
       </body>
     </html>
   );
