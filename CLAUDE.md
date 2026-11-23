@@ -14,6 +14,8 @@ Development follows **Spec Driven Design** using the `/spec` (write a spec) and 
 npx skills@latest add Klerith/fernando-skills
 ```
 
+## Skills
+Usa siempre /frontend-desing para diseñar intefaz de usuario
 ## Commands
 
 ```bash
