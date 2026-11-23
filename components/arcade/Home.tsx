@@ -1,8 +1,9 @@
 "use client";
 
-import { type ReactNode, useEffect } from "react";
+import type { ReactNode } from "react";
 import { GAMES, RECENT_SCORES, TOP_PLAYERS, formatScore, type Game, type GameColor } from "@/lib/data";
 import type { Navigate } from "./ArcadeApp";
+import { useReveal } from "./useReveal";
 
 // Portado de references/templates/home-about/home.jsx (SPEC 02).
 
@@ -64,30 +65,6 @@ const FAQ = [
     a: "Es un proyecto comunitario. Si te gusta, compártelo. Esa es toda la moneda que aceptamos.",
   },
 ];
-
-/** Añade `.in` a cada `.reveal` cuando entra en pantalla (una sola vez). */
-function useReveal() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
-    if (typeof IntersectionObserver === "undefined") {
-      els.forEach((el) => el.classList.add("in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 },
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-}
 
 function SectionHead({ num, color, title }: { num: string; color: GameColor; title: string }) {
   return (
