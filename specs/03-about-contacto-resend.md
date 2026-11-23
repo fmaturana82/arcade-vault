@@ -1,6 +1,6 @@
 # SPEC 03 — Página Acerca de con formulario de contacto vía Resend
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** SPEC 01 (`01-mvp-pantallas-visuales.md`), SPEC 02 (`02-home-page.md`)
 **Fecha:** 2026-11-23
 **Objetivo:** Añadir a la SPA la pantalla Acerca de en `#/acerca`, idéntica a `references/templates/home-about/about.jsx`, con un formulario de contacto que envía un correo real mediante una Server Action y Resend.
@@ -128,24 +128,24 @@ Archivos modificados: `lib/route.ts`, `components/arcade/ArcadeApp.tsx`, `compon
 
 ## Criterios de aceptación
 
-- [ ] `npm run lint` y `npm run build` terminan sin errores, y la consola del navegador no muestra warnings de hidratación.
-- [ ] `#/acerca` muestra la pantalla Acerca de. Al recargar en `#/acerca`, se sigue viendo.
-- [ ] La pantalla muestra, en este orden: hero con 3 highlights, divisor de 24 píxeles y sección de contacto con 3 tips y formulario.
-- [ ] Los textos, placeholders y estilos coinciden con `about.jsx` al compararlos lado a lado con `arcade-vault-standalone.html`.
-- [ ] El Nav muestra "Acerca de" como último enlace (escritorio y panel móvil), resaltado solo en `#/acerca`, y lleva a `#/acerca`.
-- [ ] Enviar con algún campo vacío o solo con espacios provoca un shake y no hace ninguna petición al servidor (pestaña Network vacía).
-- [ ] Durante el envío, el botón muestra "▶  ENVIANDO…", está deshabilitado y los campos no se pueden editar.
-- [ ] Con un `.env.local` válido, enviar el formulario hace llegar un correo a `CONTACT_TO_EMAIL` con el asunto `[Arcade Vault] Mensaje de {nombre}`. Al pulsar "Responder", el destinatario es el email del usuario.
-- [ ] Tras un envío correcto, se ve el terminal de éxito con "GRACIAS, {NOMBRE EN MAYÚSCULAS}." y "ENVIAR OTRO MENSAJE" deja el formulario vacío.
-- [ ] Un mensaje con `<script>` llega al correo como texto visible, no como HTML ejecutado.
-- [ ] Con un email de formato inválido que el navegador deje pasar (por ejemplo, llamando a la acción directamente) o con un mensaje de más de 2000 caracteres, la acción devuelve `reason: "invalid"` y el formulario hace shake con los datos intactos.
-- [ ] Si `RESEND_API_KEY` falta o no es válida, se ve el terminal de error con líneas `[ERR]`. "REINTENTAR" vuelve al formulario con los mismos datos, y la respuesta al cliente no contiene la API key ni el detalle del error.
-- [ ] Si el honeypot `website` llega relleno, la acción devuelve `{ ok: true }` y no se envía ningún correo.
-- [ ] Las secciones con `.reveal` aparecen con animación al hacer scroll. Con "reducir movimiento" activado, se ven sin animación y el divisor no parpadea.
-- [ ] La Home sigue funcionando igual tras extraer `useReveal`.
-- [ ] A 375 px de ancho, Acerca de no tiene scroll horizontal, el formulario ocupa una sola columna y el panel móvil incluye "Acerca de".
-- [ ] `.env.example` está versionado y no se ha commiteado ningún `.env.local`.
-- [ ] `app/globals.css` no contiene clases `.gp-*`.
+- [x] `npm run lint` y `npm run build` terminan sin errores, y la consola del navegador no muestra warnings de hidratación.
+- [x] `#/acerca` muestra la pantalla Acerca de. Al recargar en `#/acerca`, se sigue viendo.
+- [x] La pantalla muestra, en este orden: hero con 3 highlights, divisor de 24 píxeles y sección de contacto con 3 tips y formulario.
+- [x] Los textos, placeholders y estilos coinciden con `about.jsx` al compararlos lado a lado con `arcade-vault-standalone.html`.
+- [x] El Nav muestra "Acerca de" como último enlace (escritorio y panel móvil), resaltado solo en `#/acerca`, y lleva a `#/acerca`.
+- [x] Enviar con algún campo vacío o solo con espacios provoca un shake y no hace ninguna petición al servidor (pestaña Network vacía).
+- [x] Durante el envío, el botón muestra "▶  ENVIANDO…", está deshabilitado y los campos no se pueden editar.
+- [x] Con un `.env.local` válido, enviar el formulario hace llegar un correo a `CONTACT_TO_EMAIL` con el asunto `[Arcade Vault] Mensaje de {nombre}`. Al pulsar "Responder", el destinatario es el email del usuario.
+- [x] Tras un envío correcto, se ve el terminal de éxito con "GRACIAS, {NOMBRE EN MAYÚSCULAS}." y "ENVIAR OTRO MENSAJE" deja el formulario vacío.
+- [x] Un mensaje con `<script>` llega al correo como texto visible, no como HTML ejecutado.
+- [x] Con un email de formato inválido que el navegador deje pasar (por ejemplo, llamando a la acción directamente) o con un mensaje de más de 2000 caracteres, la acción devuelve `reason: "invalid"` y el formulario hace shake con los datos intactos.
+- [x] Si `RESEND_API_KEY` falta o no es válida, se ve el terminal de error con líneas `[ERR]`. "REINTENTAR" vuelve al formulario con los mismos datos, y la respuesta al cliente no contiene la API key ni el detalle del error.
+- [x] Si el honeypot `website` llega relleno, la acción devuelve `{ ok: true }` y no se envía ningún correo.
+- [x] Las secciones con `.reveal` aparecen con animación al hacer scroll. Con "reducir movimiento" activado, se ven sin animación y el divisor no parpadea.
+- [x] La Home sigue funcionando igual tras extraer `useReveal`.
+- [x] A 375 px de ancho, Acerca de no tiene scroll horizontal, el formulario ocupa una sola columna y el panel móvil incluye "Acerca de".
+- [x] `.env.example` está versionado y no se ha commiteado ningún `.env.local`.
+- [x] `app/globals.css` no contiene clases `.gp-*`.
 
 ---
 

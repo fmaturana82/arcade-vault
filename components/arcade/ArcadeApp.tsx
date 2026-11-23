@@ -2,6 +2,7 @@
 
 import { type ReactNode, useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
 import { hashToRoute, routeToHash, type Route } from "@/lib/route";
+import About from "./About";
 import Auth from "./Auth";
 import Footer from "./Footer";
 import GameDetail from "./GameDetail";
@@ -124,6 +125,9 @@ export default function ArcadeApp() {
       break;
     case "biblioteca":
       screen = <Library navigate={navigate} />;
+      break;
+    case "about":
+      screen = <About />;
       break;
     default:
       screen = <Home navigate={navigate} />;

@@ -6,7 +6,8 @@ export type Route =
   | { name: "detalle"; id: string }
   | { name: "player"; id: string }
   | { name: "auth" }
-  | { name: "salon" };
+  | { name: "salon" }
+  | { name: "about" };
 
 export function routeToHash(r: Route): string {
   switch (r.name) {
@@ -22,6 +23,8 @@ export function routeToHash(r: Route): string {
       return "#/acceso";
     case "salon":
       return "#/salon";
+    case "about":
+      return "#/acerca";
   }
 }
 
@@ -31,6 +34,7 @@ export function hashToRoute(hash: string): Route {
   if (path === "/biblioteca") return { name: "biblioteca" };
   if (path === "/acceso") return { name: "auth" };
   if (path === "/salon") return { name: "salon" };
+  if (path === "/acerca") return { name: "about" };
 
   const m = path.match(/^\/juegos\/([^/]+)(\/jugar)?$/);
   if (m) {

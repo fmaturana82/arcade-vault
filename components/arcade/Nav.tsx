@@ -10,7 +10,7 @@ interface NavProps {
   onSignOut: () => void;
 }
 
-type NavTarget = "home" | "biblioteca" | "salon" | "auth";
+type NavTarget = "home" | "biblioteca" | "salon" | "about" | "auth";
 
 export default function Nav({ route, user, onSignOut }: NavProps) {
   const [open, setOpen] = useState(false);
@@ -26,6 +26,7 @@ export default function Nav({ route, user, onSignOut }: NavProps) {
   const homeHref = routeToHash({ name: "home" });
   const libHref = routeToHash({ name: "biblioteca" });
   const salonHref = routeToHash({ name: "salon" });
+  const aboutHref = routeToHash({ name: "about" });
   const authHref = routeToHash({ name: "auth" });
 
   return (
@@ -46,6 +47,9 @@ export default function Nav({ route, user, onSignOut }: NavProps) {
           </a>
           <a className={cls("salon")} aria-current={current("salon")} href={salonHref}>
             Salón de la Fama
+          </a>
+          <a className={cls("about")} aria-current={current("about")} href={aboutHref}>
+            Acerca de
           </a>
         </div>
         <div className="spacer"></div>
@@ -101,6 +105,9 @@ export default function Nav({ route, user, onSignOut }: NavProps) {
         </a>
         <a className={cls("salon")} aria-current={current("salon")} href={salonHref} onClick={close}>
           Salón de la Fama
+        </a>
+        <a className={cls("about")} aria-current={current("about")} href={aboutHref} onClick={close}>
+          Acerca de
         </a>
         <a className={cls("auth")} aria-current={current("auth")} href={authHref} onClick={close}>
           {user ? "Cuenta" : "Iniciar Sesión"}
