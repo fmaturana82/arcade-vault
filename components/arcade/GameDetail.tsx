@@ -1,15 +1,26 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { formatScore, getGame, seededScores } from "@/lib/data";
+import { formatScore } from "@/lib/data";
 import { routeToHash } from "@/lib/route";
 import type { Navigate } from "./ArcadeApp";
+import { useGames } from "./GamesContext";
+import { RankEmpty, RankError, RankSkeleton } from "./RankStates";
+import { useLeaderboard } from "./useScores";
 
-const topClass = (i: number) => (i === 0 ? " top1" : i === 1 ? " top2" : i === 2 ? " top3" : "");
+const topClass = (i: number) =>
+  i === 0 ? " top1" : i === 1 ? " top2" : i === 2 ? " top3" : "";
 
-export default function GameDetail({ id, navigate }: { id: string; navigate: Navigate }) {
-  const game = useMemo(() => getGame(id), [id]);
-  const scores = useMemo(() => seededScores(id.length * 17 + 3, 10), [id]);
+export default function GameDetail({
+  id,
+  navigate,
+}: {
+  id: string;
+  navigate: Navigate;
+}) {
+  const { getGame } = useGames();
+  const game = useMemo(() => getGame(id), [getGame, id]);
+  const board = useLeaderboard(id, 10);
 
   // Id inexistente → Biblioteca.
   useEffect(() => {
@@ -40,7 +51,13 @@ export default function GameDetail({ id, navigate }: { id: string; navigate: Nav
             </div>
             <div>
               <div className="l">Mejor global</div>
-              <div className="v" style={{ color: "var(--magenta)", textShadow: "0 0 6px rgba(255,0,110,0.5)" }}>
+              <div
+                className="v"
+                style={{
+                  color: "var(--magenta)",
+                  textShadow: "0 0 6px rgba(255,0,110,0.5)",
+                }}
+              >
                 {formatScore(game.best)}
               </div>
             </div>
@@ -48,7 +65,10 @@ export default function GameDetail({ id, navigate }: { id: string; navigate: Nav
               <div className="l">Dificultad</div>
               <div
                 className="v"
-                style={{ color: "var(--yellow)", textShadow: "0 0 6px rgba(245,255,0,0.5)" }}
+                style={{
+                  color: "var(--yellow)",
+                  textShadow: "0 0 6px rgba(245,255,0,0.5)",
+                }}
                 aria-label="Dificultad 3 de 5"
               >
                 ★ ★ ★ ☆ ☆
@@ -56,10 +76,16 @@ export default function GameDetail({ id, navigate }: { id: string; navigate: Nav
             </div>
           </div>
           <div className="detail-actions">
-            <a className="btn xl pulse" href={routeToHash({ name: "player", id: game.id })}>
-              ▶  JUGAR AHORA
+            <a
+              className="btn xl pulse"
+              href={routeToHash({ name: "player", id: game.id })}
+            >
+              ▶ JUGAR AHORA
             </a>
-            <a className="btn ghost lg" href={routeToHash({ name: "biblioteca" })}>
+            <a
+              className="btn ghost lg"
+              href={routeToHash({ name: "biblioteca" })}
+            >
               VOLVER AL VAULT
             </a>
           </div>
@@ -69,12 +95,28 @@ export default function GameDetail({ id, navigate }: { id: string; navigate: Nav
       <aside aria-label="Mejores puntuaciones">
         <div className="leaderboard">
           <h3>MEJORES PUNTUACIONES</h3>
-          {scores.map((r, i) => (
-            <div key={r.name} className={"lb-row" + topClass(i)}>
+          {board.status === "loading" && <RankSkeleton rows={10} />}
+          {board.status === "error" && <RankError onRetry={board.retry} />}
+          {board.status === "ready" && board.data?.length === 0 && (
+            <RankEmpty
+              title="SÉ EL PRIMERO EN ENTRAR"
+              text={`Todavía nadie tiene marca en ${game.title}.`}
+            />
+          )}
+          {board.data?.map((r, i) => (
+            <div key={r.rank} className={"lb-row" + topClass(i)}>
               <div className="rk">#{String(r.rank).padStart(2, "0")}</div>
               <div className="pl">
                 {r.name}
-                <div style={{ fontSize: 10, color: "var(--ink-faint)", letterSpacing: "0.1em" }}>{r.date}</div>
+                <div
+                  style={{
+                    fontSize: 10,
+                    color: "var(--ink-faint)",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  {r.date}
+                </div>
               </div>
               <div className="sc">{formatScore(r.score)}</div>
             </div>
