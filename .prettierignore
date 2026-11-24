@@ -1,0 +1,9 @@
+.next
+node_modules
+references
+package-lock.json
+AGENTS.md
+public
+mp3
+.playwright-mcp
+.playwright-screenshots
