@@ -1,5 +1,3 @@
-import { getGame } from "./data";
-
 export type Route =
   | { name: "home" }
   | { name: "biblioteca" }
@@ -8,7 +6,6 @@ export type Route =
   | { name: "auth" }
   | { name: "salon" }
   | { name: "about" };
-
 export function routeToHash(r: Route): string {
   switch (r.name) {
     case "home":
@@ -27,19 +24,22 @@ export function routeToHash(r: Route): string {
       return "#/acerca";
   }
 }
-
-/** Hash vacío, desconocido o id de juego inexistente → Home. */
-export function hashToRoute(hash: string): Route {
+/** Hash vacío o desconocido → Home. Id de juego inexistente en el catálogo → Biblioteca. */
+export function hashToRoute(
+  hash: string,
+  games: readonly { id: string }[],
+): Route {
   const path = hash.replace(/^#/, "").replace(/\/+$/, "") || "/";
   if (path === "/biblioteca") return { name: "biblioteca" };
   if (path === "/acceso") return { name: "auth" };
   if (path === "/salon") return { name: "salon" };
   if (path === "/acerca") return { name: "about" };
-
   const m = path.match(/^\/juegos\/([^/]+)(\/jugar)?$/);
   if (m) {
     const id = decodeURIComponent(m[1]);
-    if (getGame(id)) return m[2] ? { name: "player", id } : { name: "detalle", id };
+    if (games.some((g) => g.id === id))
+      return m[2] ? { name: "player", id } : { name: "detalle", id };
+    return { name: "biblioteca" };
   }
   return { name: "home" };
 }

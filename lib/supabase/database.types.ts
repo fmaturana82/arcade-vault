@@ -13,13 +13,95 @@ export type Database = {
   };
   public: {
     Tables: {
-      [_ in never]: never;
+      games: {
+        Row: {
+          best: number;
+          cat: string;
+          color: string;
+          cover: string;
+          created_at: string;
+          id: string;
+          long: string;
+          plays: string;
+          short: string;
+          sort_order: number;
+          title: string;
+        };
+        Insert: {
+          best?: number;
+          cat: string;
+          color: string;
+          cover: string;
+          created_at?: string;
+          id: string;
+          long: string;
+          plays?: string;
+          short: string;
+          sort_order: number;
+          title: string;
+        };
+        Update: {
+          best?: number;
+          cat?: string;
+          color?: string;
+          cover?: string;
+          created_at?: string;
+          id?: string;
+          long?: string;
+          plays?: string;
+          short?: string;
+          sort_order?: number;
+          title?: string;
+        };
+        Relationships: [];
+      };
+      scores: {
+        Row: {
+          created_at: string;
+          game_id: string;
+          id: number;
+          name: string;
+          score: number;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          game_id: string;
+          id?: never;
+          name: string;
+          score: number;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          game_id?: string;
+          id?: never;
+          name?: string;
+          score?: number;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "scores_game_id_fkey";
+            columns: ["game_id"];
+            isOneToOne: false;
+            referencedRelation: "games";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      top_players_today: {
+        Args: { p_limit?: number };
+        Returns: {
+          name: string;
+          score: number;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

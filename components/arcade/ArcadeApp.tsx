@@ -1,10 +1,18 @@
 "use client";
 
-import { type ReactNode, useCallback, useEffect, useMemo, useSyncExternalStore } from "react";
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
+import type { Game } from "@/lib/data";
 import { hashToRoute, routeToHash, type Route } from "@/lib/route";
 import About from "./About";
 import Auth from "./Auth";
 import Footer from "./Footer";
+import { GamesProvider } from "./GamesContext";
 import GameDetail from "./GameDetail";
 import GamePlayer from "./GamePlayer";
 import HallOfFame from "./HallOfFame";
@@ -64,22 +72,26 @@ function parseUser(raw: string | null): User | null {
   }
 }
 
-export default function ArcadeApp() {
+export default function ArcadeApp({ games }: { games: Game[] }) {
   const hash = useSyncExternalStore(subscribeHash, getHash, getServerHash);
-  const route = useMemo(() => hashToRoute(hash), [hash]);
+  const route = useMemo(() => hashToRoute(hash, games), [hash, games]);
 
-  const userRaw = useSyncExternalStore(subscribeUser, getUserRaw, getServerUserRaw);
+  const userRaw = useSyncExternalStore(
+    subscribeUser,
+    getUserRaw,
+    getServerUserRaw,
+  );
   const user = useMemo(() => parseUser(userRaw), [userRaw]);
 
   // Normaliza el hash (vacío, desconocido o id inexistente) a su forma canónica.
   // Se calcula desde el hash real: en el pase de hidratación `route` aún refleja el snapshot del servidor.
   useEffect(() => {
-    const canonical = routeToHash(hashToRoute(window.location.hash));
+    const canonical = routeToHash(hashToRoute(window.location.hash, games));
     if (window.location.hash !== canonical) {
       history.replaceState(null, "", canonical);
       window.dispatchEvent(new HashChangeEvent("hashchange"));
     }
-  }, [route]);
+  }, [route, games]);
 
   // Cada cambio de pantalla vuelve arriba.
   useEffect(() => {
@@ -115,7 +127,15 @@ export default function ArcadeApp() {
       screen = <GameDetail key={route.id} id={route.id} navigate={navigate} />;
       break;
     case "player":
-      screen = <GamePlayer key={route.id} id={route.id} user={user} navigate={navigate} onSaveScore={saveScore} />;
+      screen = (
+        <GamePlayer
+          key={route.id}
+          id={route.id}
+          user={user}
+          navigate={navigate}
+          onSaveScore={saveScore}
+        />
+      );
       break;
     case "auth":
       screen = <Auth navigate={navigate} onLogin={login} />;
@@ -134,10 +154,10 @@ export default function ArcadeApp() {
   }
 
   return (
-    <>
+    <GamesProvider games={games}>
       <Nav route={route} user={user} onSignOut={signOut} />
       <main className="av-main">{screen}</main>
       <Footer />
-    </>
+    </GamesProvider>
   );
 }

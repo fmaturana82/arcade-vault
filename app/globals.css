@@ -1392,3 +1392,26 @@ button:focus-visible,
   /* SPEC 03: el divisor de Acerca de no parpadea y el formulario no tiembla */
   .div-pixels span, .contact-form.shake { animation: none; }
 }
+/* ---------- SPEC 06 · Estados de rankings y catálogo fuera de línea ---------- */
+.rank-skeleton { display: flex; flex-direction: column; gap: 2px; padding: 6px 0; }
+.rs-row { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px; padding: 12px 18px; border-bottom: 1px solid var(--line-2); }
+.rs-led { font-family: var(--pixel); font-size: 11px; color: var(--ink-faint); opacity: 0.35; letter-spacing: 0.08em; animation: led-idle 1.4s ease-in-out infinite; }
+.rs-bar { height: 8px; background: repeating-linear-gradient(90deg, var(--ink-faint) 0 10px, transparent 10px 14px); opacity: 0.3; animation: led-idle 1.4s ease-in-out infinite; }
+.rs-row:nth-child(2n) .rs-led, .rs-row:nth-child(2n) .rs-bar { animation-delay: 0.2s; }
+@keyframes led-idle { 50% { opacity: 0.12; } }
+.rank-msg { padding: 36px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.rank-msg .rm-title { font-size: 11px; line-height: 1.6; color: var(--cyan); text-shadow: 0 0 8px rgba(0,245,255,0.45); }
+.rank-msg .rm-text { margin: 0; color: var(--ink-dim); font-size: 13px; max-width: 34ch; }
+.rank-msg.error .rm-title { color: var(--magenta); text-shadow: 0 0 8px rgba(255,0,110,0.5); }
+.rank-msg .btn { margin-top: 6px; }
+.podium-slot.empty .name, .podium-slot.empty .score { color: var(--ink-faint); text-shadow: none; }
+.vault-offline { min-height: 72vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 48px 16px; text-align: center; }
+.vo-screen { position: relative; width: min(360px, 100%); aspect-ratio: 4 / 3; border: 2px solid var(--magenta); border-radius: 18px; overflow: hidden; box-shadow: 0 0 24px rgba(255,0,110,0.35), inset 0 0 40px rgba(255,0,110,0.15); background: repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 4px), radial-gradient(ellipse at center, #1a0a18 0%, var(--bg) 75%); display: grid; place-items: center; }
+.vo-roll { position: absolute; left: 0; right: 0; height: 28%; top: -30%; background: linear-gradient(180deg, transparent, rgba(255,0,110,0.18), transparent); animation: vo-roll 3.2s linear infinite; }
+@keyframes vo-roll { to { top: 105%; } }
+.vo-nosignal { font-size: 14px; color: var(--magenta); text-shadow: 0 0 10px rgba(255,0,110,0.7); letter-spacing: 0.2em; }
+.vo-title { font-family: var(--pixel); font-size: clamp(16px, 3.4vw, 26px); color: var(--ink); text-shadow: 0 0 10px rgba(255,0,110,0.5); margin: 8px 0 0; line-height: 1.4; }
+.vo-text { margin: 0; color: var(--ink-dim); max-width: 46ch; font-size: 14px; line-height: 1.6; }
+@media (prefers-reduced-motion: reduce) {
+  .rs-led, .rs-bar, .vo-roll { animation: none; }
+}
