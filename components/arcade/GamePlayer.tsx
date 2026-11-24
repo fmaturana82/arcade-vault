@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useReducer, useState } from "react";
+import type { MeteoroStats } from "@/games/meteoro/engine";
 import { formatScore, getGame } from "@/lib/data";
 import { routeToHash } from "@/lib/route";
 import type { Navigate, ScoreEntry, User } from "./ArcadeApp";
+import MeteoroGame from "./games/MeteoroGame";
 
 interface GamePlayerProps {
   id: string;
@@ -21,6 +23,7 @@ interface SimState {
 type SimAction = { type: "tick"; points: number } | { type: "reset" };
 
 const INITIAL: SimState = { score: 0, lives: 3, level: 1 };
+const METEORO_INITIAL: MeteoroStats = { score: 0, lives: 3, level: 1, tripleShot: 0 };
 
 function simReducer(state: SimState, action: SimAction): SimState {
   if (action.type === "reset") return INITIAL;
@@ -32,7 +35,12 @@ function simReducer(state: SimState, action: SimAction): SimState {
 
 export default function GamePlayer({ id, user, navigate, onSaveScore }: GamePlayerProps) {
   const game = useMemo(() => getGame(id), [id]);
-  const [{ score, lives, level }, dispatch] = useReducer(simReducer, INITIAL);
+  const [sim, dispatch] = useReducer(simReducer, INITIAL);
+  // METEORO es jugable: el HUD viene del motor. El resto de juegos sigue simulado.
+  const isMeteoro = id === "meteoro";
+  const [meteoro, setMeteoro] = useState<MeteoroStats>(METEORO_INITIAL);
+  const [runId, setRunId] = useState(0);
+  const { score, lives, level } = isMeteoro ? meteoro : sim;
   const [paused, setPaused] = useState(false);
   const [over, setOver] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -45,18 +53,27 @@ export default function GamePlayer({ id, user, navigate, onSaveScore }: GamePlay
   }, [game, navigate]);
 
   useEffect(() => {
-    if (over || paused) return;
+    if (over || paused || isMeteoro) return;
     const t = setInterval(() => dispatch({ type: "tick", points: Math.floor(10 + Math.random() * 90) }), 220);
     return () => clearInterval(t);
-  }, [over, paused]);
+  }, [over, paused, isMeteoro]);
 
   if (!game) return null;
 
   const restart = () => {
     dispatch({ type: "reset" });
+    if (isMeteoro) setRunId((r) => r + 1);
     setPaused(false);
     setOver(false);
     setSaved(false);
+  };
+
+  const meteoroGameOver = (finalScore: number) => {
+    setMeteoro((s) => ({ ...s, score: finalScore }));
+    setOver(true);
+  };
+  const meteoroTogglePause = () => {
+    if (!over) setPaused((p) => !p);
   };
 
   const save = () => {
@@ -84,6 +101,12 @@ export default function GamePlayer({ id, user, navigate, onSaveScore }: GamePlay
             <div className="l">Nivel</div>
             <div className="v">{String(level).padStart(2, "0")}</div>
           </div>
+          {isMeteoro && (
+            <div className={"hud-stat shot" + (meteoro.tripleShot > 0 ? " on" : "")}>
+              <div className="l">Disparo</div>
+              <div className="v">{meteoro.tripleShot > 0 ? `3x ${meteoro.tripleShot.toFixed(1)}s` : "—"}</div>
+            </div>
+          )}
         </div>
         <div className="hud-actions">
           <button type="button" className="btn yellow" onClick={() => setPaused((p) => !p)} disabled={over}>
@@ -100,13 +123,23 @@ export default function GamePlayer({ id, user, navigate, onSaveScore }: GamePlay
 
       <div className="crt">
         <div className="crt-screen">
-          <div className="game-arena" aria-hidden="true">
-            <div className="grid-floor"></div>
-            <div className="enemy e1"></div>
-            <div className="enemy e2"></div>
-            <div className="enemy e3"></div>
-            <div className="player-ship"></div>
-          </div>
+          {isMeteoro ? (
+            <MeteoroGame
+              paused={paused || over}
+              runId={runId}
+              onStats={setMeteoro}
+              onGameOver={meteoroGameOver}
+              onTogglePause={meteoroTogglePause}
+            />
+          ) : (
+            <div className="game-arena" aria-hidden="true">
+              <div className="grid-floor"></div>
+              <div className="enemy e1"></div>
+              <div className="enemy e2"></div>
+              <div className="enemy e3"></div>
+              <div className="player-ship"></div>
+            </div>
+          )}
           {paused && (
             <div className="crt-content" style={{ background: "rgba(0,0,0,0.6)", zIndex: 5 }} role="status">
               <div>
@@ -124,6 +157,9 @@ export default function GamePlayer({ id, user, navigate, onSaveScore }: GamePlay
           <span>CARGA · 1MB</span>
         </div>
       </div>
+      {isMeteoro && (
+        <p className="meteoro-controls">←→ ROTAR · ↑ PROPULSAR · ESPACIO DISPARAR · P PAUSA</p>
+      )}
 
       {over && (
         <div className="modal-bd">

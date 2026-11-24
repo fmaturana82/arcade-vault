@@ -129,6 +129,17 @@ export const GAMES: Game[] = [
     best: 24,
     plays: "4.2K",
   },
+  {
+    id: "meteoro",
+    title: "METEORO",
+    short: "Sobrevive a la lluvia de meteoros en el vacío.",
+    long: "Pilotas una nave vectorial atrapada en un campo de meteoros que no deja de fragmentarse. Rota, acelera y dispara: cada impacto parte la roca en trozos más rápidos. Recoge el núcleo magenta para disparar en abanico.",
+    cat: "SHOOTER",
+    cover: "cover-meteoro",
+    color: "cyan",
+    best: 36500,
+    plays: "8.2K",
+  },
 ];
 
 export const CATS = ["TODOS", "ARCADE", "PUZZLE", "SHOOTER", "VERSUS"] as const satisfies readonly [

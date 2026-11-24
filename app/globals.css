@@ -521,6 +521,31 @@ a { color: inherit; text-decoration: none; }
   text-shadow: 0 0 8px var(--yellow);
 }
 
+/* METEORO: lluvia diagonal de estelas cian + escena vectorial (nave cian, rocas amarillas en
+   contorno, núcleo magenta). Contornos en línea, como el canvas del juego, para no confundirse
+   con las rocas rellenas de .cover-rocas. */
+.cover-meteoro { background: radial-gradient(ellipse at 70% 20%, #00303f 0%, #001018 45%, #000 100%); }
+.cover-meteoro::after {
+  content: "";
+  position: absolute; inset: -30%;
+  transform: rotate(-28deg);
+  background:
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.75)) 12% 18% / 22% 2px no-repeat,
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.5)) 64% 26% / 14% 1px no-repeat,
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.9)) 38% 41% / 28% 2px no-repeat,
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.45)) 80% 52% / 12% 1px no-repeat,
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.7)) 20% 63% / 18% 2px no-repeat,
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.4)) 58% 76% / 16% 1px no-repeat,
+    linear-gradient(90deg, transparent, rgba(0,245,255,0.6)) 30% 86% / 10% 1px no-repeat;
+  opacity: 0.85;
+}
+.cover-meteoro::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cg fill='none' stroke-linejoin='round' stroke-width='2.5'%3E%3Cpolygon stroke='%23f5ff00' points='290,44 318,52 338,80 334,110 314,134 284,140 256,126 244,98 252,66 270,58'/%3E%3Cpolygon stroke='%23f5ff00' points='92,186 112,192 120,214 110,236 88,242 68,230 66,206 78,194'/%3E%3Cpolygon stroke='%23f5ff00' points='334,222 346,228 348,242 336,250 322,246 320,232'/%3E%3Cpolygon stroke='%2300f5ff' transform='translate(196 168) rotate(35)' points='0,-18 12,13 0,7 -12,13'/%3E%3Cpath stroke='%23ffffff' stroke-linecap='round' d='M214 141l3.4-4.9M226 124l3.4-4.9'/%3E%3Ccircle stroke='%23ff006e' cx='122' cy='78' r='7'/%3E%3C/g%3E%3Ccircle fill='%23ff006e' cx='122' cy='78' r='2.5'/%3E%3C/svg%3E") center / cover no-repeat;
+  filter: drop-shadow(0 0 4px rgba(0,245,255,0.55)) drop-shadow(0 0 7px rgba(245,255,0,0.3));
+}
+
 .cover-rana { background: linear-gradient(180deg,#001f2a,#0a0a18); }
 .cover-rana::after {
   content: "";
@@ -698,6 +723,19 @@ a { color: inherit; text-decoration: none; }
 .crt-bottom .led::before {
   content: ""; width: 8px; height: 8px; border-radius: 50%;
   background: var(--green); box-shadow: 0 0 6px var(--green);
+}
+
+/* METEORO: canvas real (800×600 lógico, backing store × devicePixelRatio). .crt-screen ya es 4:3. */
+.meteoro-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hud-stat.shot .v { min-width: 9ch; color: var(--ink-faint); text-shadow: none; }
+.hud-stat.shot.on .v { color: var(--magenta); text-shadow: 0 0 6px rgba(255,0,110,0.6); }
+.meteoro-controls {
+  margin: 14px 0 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--ink-dim);
 }
 
 /* fake in-screen game */
