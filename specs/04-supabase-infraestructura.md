@@ -1,6 +1,6 @@
 # SPEC 04 — Infraestructura de Supabase
 
-**Estado:** Aprobado
+**Estado:** Implementado
 **Depende de:** SPEC 03 (`03-about-contacto-resend.md`)
 **Fecha:** 2026-11-24
 **Objetivo:** Dejar el proyecto conectado a Supabase con `@supabase/ssr`, clientes de navegador y servidor tipados, variables de entorno documentadas y un script que comprueba la conexión, sin usar todavía el cliente en ninguna pantalla.
@@ -17,7 +17,7 @@
 - **Variables de entorno:** `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (`sb_publishable_…`). Se documentan en `.env.example` y se rellenan en `.env.local` con los valores de MCP `get_project_url` y `get_publishable_keys`.
 - **Tipos de la BD** `lib/supabase/database.types.ts`, generados con MCP `generate_typescript_types`. Hoy el esquema `public` está vacío, así que el archivo solo trae la estructura base. Los dos clientes se tipan con `Database`.
 - **Script de regeneración de tipos:** `npm run supabase:types` ejecuta la CLI de Supabase (`supabase gen types typescript --project-id hnjzrtkclevqgznhyygh --schema public`) y escribe `lib/supabase/database.types.ts`. Requiere `supabase login` previo, documentado en el README.
-- **Script de comprobación:** `scripts/check-supabase.ts` y `npm run supabase:check` (`node --env-file=.env.local scripts/check-supabase.ts`, Node 22 ejecuta TypeScript directamente):
+- **Script de comprobación:** `scripts/check-supabase.ts` y `npm run supabase:check` (`node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env.local scripts/check-supabase.ts`, Node 22 ejecuta TypeScript directamente; sin `.env.local` el script informa de la variable que falta):
   - Comprueba que las dos variables existen.
   - Crea un cliente con `createClient` de `@supabase/supabase-js`.
   - Hace una petición ligera a `GET {url}/auth/v1/health` con la cabecera `apikey`.
@@ -69,7 +69,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_xxxxxxxx
 
 ### `package.json` (scripts añadidos)
 ```json
-"supabase:check": "node --env-file=.env.local scripts/check-supabase.ts",
+"supabase:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env.local scripts/check-supabase.ts",
 "supabase:types": "supabase gen types typescript --project-id hnjzrtkclevqgznhyygh --schema public > lib/supabase/database.types.ts"
 ```
 La CLI `supabase` se añade como `devDependency`.
@@ -92,18 +92,18 @@ Archivos modificados: `.env.example`, `.env.local` (no versionado), `package.jso
 
 ## Criterios de aceptación
 
-- [ ] `npm run lint` y `npm run build` terminan sin errores.
-- [ ] `package.json` incluye `@supabase/supabase-js`, `@supabase/ssr` y `server-only` en `dependencies`, y `supabase` en `devDependencies`.
-- [ ] `.env.example` documenta `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, y no contiene valores reales.
-- [ ] Ningún archivo versionado contiene `SUPABASE_SERVICE_ROLE_KEY`, `sb_secret_` ni la publishable key real.
-- [ ] Con `.env.local` válido, `npm run supabase:check` imprime `✔ Supabase OK` y sale con código 0.
-- [ ] Con `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` vacía, `npm run supabase:check` imprime un error que nombra la variable y sale con código 1.
-- [ ] Con una clave inválida, `npm run supabase:check` imprime `✖ Supabase ERROR` y sale con código 1. La salida no muestra la clave.
-- [ ] `lib/supabase/database.types.ts` exporta `Database`, y ambos clientes devuelven `SupabaseClient<Database>`.
-- [ ] Importar `lib/supabase/server.ts` desde un archivo `"use client"` hace fallar el build (lo garantiza `server-only`).
-- [ ] `grep -r "lib/supabase" app components` no devuelve resultados: ningún componente ni página usa todavía el cliente.
-- [ ] La app se ve y se comporta igual que antes en todas las rutas (`#/`, `#/biblioteca`, `#/salon`, `#/acceso`, `#/acerca`).
-- [ ] El proyecto Supabase sigue sin tablas en `public` (MCP `list_tables`).
+- [x] `npm run lint` y `npm run build` terminan sin errores.
+- [x] `package.json` incluye `@supabase/supabase-js`, `@supabase/ssr` y `server-only` en `dependencies`, y `supabase` en `devDependencies`.
+- [x] `.env.example` documenta `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, y no contiene valores reales.
+- [x] Ningún archivo versionado contiene `SUPABASE_SERVICE_ROLE_KEY`, `sb_secret_` ni la publishable key real.
+- [x] Con `.env.local` válido, `npm run supabase:check` imprime `✔ Supabase OK` y sale con código 0.
+- [x] Con `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` vacía, `npm run supabase:check` imprime un error que nombra la variable y sale con código 1.
+- [x] Con una clave inválida, `npm run supabase:check` imprime `✖ Supabase ERROR` y sale con código 1. La salida no muestra la clave.
+- [x] `lib/supabase/database.types.ts` exporta `Database`, y ambos clientes devuelven `SupabaseClient<Database>`.
+- [x] Importar `lib/supabase/server.ts` desde un archivo `"use client"` hace fallar el build (lo garantiza `server-only`).
+- [x] `grep -r "lib/supabase" app components` no devuelve resultados: ningún componente ni página usa todavía el cliente.
+- [x] La app se ve y se comporta igual que antes en todas las rutas (`#/`, `#/biblioteca`, `#/salon`, `#/acceso`, `#/acerca`).
+- [x] El proyecto Supabase sigue sin tablas en `public` (MCP `list_tables`).
 
 ---
 

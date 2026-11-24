@@ -9,7 +9,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "supabase:types": "supabase gen types typescript --project-id hnjzrtkclevqgznhyygh --schema public > lib/supabase/database.types.ts",
-    "supabase:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file=.env.local scripts/check-supabase.ts"
+    "supabase:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env.local scripts/check-supabase.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
